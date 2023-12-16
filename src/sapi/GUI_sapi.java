@@ -9,10 +9,18 @@ package sapi;
  *
  * @author teguh
  */
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 
 public class GUI_sapi extends javax.swing.JFrame {
@@ -47,14 +55,12 @@ public class GUI_sapi extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtlokasi = new javax.swing.JTextField();
         txtumur = new javax.swing.JTextField();
-        txtvarietas = new javax.swing.JTextField();
         rdbtn1 = new javax.swing.JRadioButton();
         rdbtn2 = new javax.swing.JRadioButton();
         btncetak = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        txtHarga = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,12 +83,6 @@ public class GUI_sapi extends javax.swing.JFrame {
         txtumur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtumurActionPerformed(evt);
-            }
-        });
-
-        txtvarietas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtvarietasActionPerformed(evt);
             }
         });
 
@@ -109,26 +109,24 @@ public class GUI_sapi extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("Harga");
-
-        txtHarga.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtHargaActionPerformed(evt);
-            }
-        });
-
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Varietas", "Umur", "Jenis Varietas", "Lokasi", "Harga"
+                "Varietas", "Umur", "Jenis Varietas", "Lokasi"
             }
         ));
         jScrollPane2.setViewportView(table);
+
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -138,44 +136,42 @@ public class GUI_sapi extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(80, 80, 80)
+                        .addComponent(jLabel3)
+                        .addGap(94, 94, 94)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 432, Short.MAX_VALUE))
+                                .addComponent(txtumur)
+                                .addGap(480, 480, 480))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(80, 80, 80)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 432, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtlokasi)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtvarietas)
-                                        .addGap(18, 18, 18))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(txtHarga)
-                                            .addComponent(txtlokasi))
-                                        .addGap(18, 18, 18)))
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(94, 94, 94)
-                        .addComponent(txtumur)
-                        .addGap(480, 480, 480))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(56, 56, 56)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(rdbtn2)
-                                    .addComponent(rdbtn1)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addGap(90, 90, 90)
-                                .addComponent(btncetak)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addComponent(jLabel4)
+                                        .addGap(56, 56, 56)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(rdbtn2)
+                                            .addComponent(rdbtn1)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(90, 90, 90)
+                                        .addComponent(btncetak)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,7 +182,7 @@ public class GUI_sapi extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
-                            .addComponent(txtvarietas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -204,11 +200,7 @@ public class GUI_sapi extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addComponent(txtlokasi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
+                        .addGap(65, 65, 65)
                         .addComponent(btncetak))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
@@ -224,10 +216,6 @@ public class GUI_sapi extends javax.swing.JFrame {
     private void txtumurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtumurActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtumurActionPerformed
-
-    private void txtvarietasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtvarietasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtvarietasActionPerformed
 
     private void rdbtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbtn2ActionPerformed
         // TODO add your handling code here:
@@ -246,28 +234,28 @@ public class GUI_sapi extends javax.swing.JFrame {
         table.setAutoCreateColumnsFromModel(true);
         sapi cow;
         cow = new JenisVarietas();
-        cow.setVarietas(txtvarietas.getText());
+        //cow.setVarietas(txtvarietas.getText());
         cow.setLokasi(txtlokasi.getText());
         cow.setUmur(txtumur.getText());
-        cow.setHarga(Integer.parseInt(txtHarga.getText()));
+        //cow.setHarga(Integer.parseInt(txtHarga.getText()));
         String JenisKelamin="";
         if (rdbtn1.isSelected()){
             cow.setJenisKelamin(rdbtn1.getText());
         } else {
             cow.setJenisKelamin(rdbtn2.getText());
         }
-        int harga = Integer.parseInt(txtHarga.getText());
-        if (harga == 0) {
-            JOptionPane.showMessageDialog(null, "Harga tidak boleh 0", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return; // Keluar dari metode jika harga adalah 0
-        }
+        //int harga = Integer.parseInt(txtHarga.getText());
+//        if (harga == 0) {
+//            JOptionPane.showMessageDialog(null, "Harga tidak boleh 0", "Peringatan", JOptionPane.WARNING_MESSAGE);
+//            return; // Keluar dari metode jika harga adalah 0
+//        }
         
  
         list.add(cow.getCetakVarietas());
         list.add(cow.getCetakUmur());
         list.add(cow.getCetakJenisKelamin());
         list.add(cow.getCetakLokasi());
-        list.add(cow.getCetakHarga());
+        //list.add(cow.getCetakHarga());
     
         // Menambahkan baris baru ke model tabel menggunakan data dari ArrayList 'list'
         dataModel.addRow(list.toArray());
@@ -283,9 +271,9 @@ public class GUI_sapi extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_rdbtn1ActionPerformed
 
-    private void txtHargaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHargaActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtHargaActionPerformed
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -325,19 +313,17 @@ public class GUI_sapi extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btncetak;
     private javax.swing.ButtonGroup btngroup;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JRadioButton rdbtn1;
     private javax.swing.JRadioButton rdbtn2;
     private javax.swing.JTable table;
-    private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtlokasi;
     private javax.swing.JTextField txtumur;
-    private javax.swing.JTextField txtvarietas;
     // End of variables declaration//GEN-END:variables
 }
